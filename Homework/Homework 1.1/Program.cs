@@ -1,17 +1,25 @@
-﻿namespace Homework_1._1
+﻿
+
+namespace Homework_1._1
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             Console.Write("Enter first number: ");
-            int num1 = int.Parse(Console.ReadLine() ?? string.Empty);
+            bool isNum1 = int.TryParse(Console.ReadLine() ?? string.Empty, out int num1);
+
             Console.Write("Enter second number: ");
-            int num2 = int.Parse(Console.ReadLine() ?? string.Empty);
-            int result = num1 + num2;
-
-            Console.WriteLine($"{num1} + {num2} = {result}");
-
+            bool isNum2 = int.TryParse(Console.ReadLine() ?? string.Empty, out int num2);
+            if (isNum1 && isNum2)
+            {
+                int result = num1 + num2;
+                Console.WriteLine($"{num1} + {num2} = {result}");
+            }
+            else
+            {
+                Console.WriteLine("You should use only numbers!");
+            }
         }
     }
 }
