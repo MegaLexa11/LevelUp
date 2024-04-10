@@ -10,152 +10,165 @@ while (isOneMoreTry)
     Console.Write("Enter number of players: ");
     bool isPlayersCorrect = int.TryParse(Console.ReadLine() ?? string.Empty, out int playersNum);
 
-
     Console.Write("Enter field size: ");
     bool isSizeCorrect = int.TryParse(Console.ReadLine() ?? string.Empty, out int fieldSize);
 
     Console.Write("Enter amount of traps (there also will be some boosts in the game): ");
     bool isTrapsCorrect = int.TryParse(Console.ReadLine() ?? string.Empty, out int trapsAmount);
 
-    if (isPlayersCorrect && isSizeCorrect && isTrapsCorrect)
-    {
-        int diceSize = 6;
-        int boostSize = 2;
-        bool ifgameContinues = true;
-        bool isCellBlocked = true;
-        int diceResult, trapPosition, boostPosition;
+    int trapsDifference = 2;
 
-        int[] playerPositions = new int[playersNum];
-        ConsoleColor[] playerColors = new ConsoleColor[playersNum];
+    if (!(isPlayersCorrect && isSizeCorrect && isTrapsCorrect) || playersNum <= 0 || fieldSize <= 0 || trapsAmount <= 0)
+    {
+        Console.WriteLine("Incorrect Input! You should use only positive numbers");
+        Console.WriteLine();
+        continue;
+    }
+
+    if (fieldSize - trapsAmount < trapsDifference)
+    {
+        Console.WriteLine($"Amount of traps should be less than the size of the field on {trapsDifference}!");
+        Console.WriteLine();
+        continue;
+    }
+
+    int diceSize = 6;
+    int boostMultiplier = 2;
+    int boostsDifference = 2;
+    bool isGameContinues = true;
+    bool isCellBlocked;
+    int diceResult, trapPosition, boostPosition;
+
+    int[] playerPositions = new int[playersNum];
+    ConsoleColor[] playerColors = new ConsoleColor[playersNum];
+    for (int i = 0; i < playerPositions.Length; i++)
+    {
+        playerColors[i] = GetRandomConsoleColor();
+    }
+
+    int[] trapsPositions = new int[trapsAmount];
+    for (int i = 0; i < trapsPositions.Length; i++)
+    {
+        isCellBlocked = true;
+        while (isCellBlocked)
+        {
+            trapPosition = gameRandomizer.Next(1, fieldSize);
+            isCellBlocked = trapsPositions.Contains(trapPosition);
+            if (!isCellBlocked)
+            {
+                trapsPositions[i] = trapPosition;
+            }
+        }   
+    }
+
+    int boostsAmount = trapsAmount - boostsDifference;
+    int boostPlacesLeft = fieldSize - trapsAmount;
+    if (boostsAmount > boostPlacesLeft)
+    {
+        boostsAmount = boostPlacesLeft;
+    }
+    else if (boostsAmount < 0)
+    {
+        boostsAmount = 0;
+    }
+    int[] boostsPositions;
+    
+    boostsPositions = new int[boostsAmount];
+    for (int i = 0; i < boostsPositions.Length; i++)
+    {
+        isCellBlocked = true;
+        while (isCellBlocked)
+        {
+            boostPosition = gameRandomizer.Next(1, fieldSize);
+            isCellBlocked = trapsPositions.Contains(boostPosition) || boostsPositions.Contains(boostPosition);
+            if (!isCellBlocked)
+            {
+                boostsPositions[i] = boostPosition;
+            }
+        }
+
+    }
+
+    while (isGameContinues)
+    {
         for (int i = 0; i < playerPositions.Length; i++)
         {
-            playerPositions[i] = 0;
-            playerColors[i] = GetRandomConsoleColor();
-        }
+            Console.ForegroundColor = playerColors[i];
+            Console.WriteLine($"Player's {i + 1} turn!");
+            Console.ResetColor();
+            Console.Write("Press Enter to throw a dice: ");
+            Console.ReadLine();
 
-        int[] trapsPositions = new int[trapsAmount];
-        for (int i = 0; i < trapsPositions.Length; i++)
-        {
-            while (isCellBlocked)
+            diceResult = gameRandomizer.Next(1, diceSize);
+            playerPositions[i] += diceResult;
+            Console.ForegroundColor = playerColors[i];
+            Console.Write($"Player {i + 1} ");
+            Console.ResetColor();
+            Console.Write("moved on ");
+            Console.ForegroundColor = playerColors[i];
+            Console.Write($"{diceResult} ");
+            Console.ResetColor();
+            Console.WriteLine("squares");
+
+            // По идее, пока игрок движется вперед и попадает на бусты, или ловушки, то движение продолжается
+            while (trapsPositions.Contains(playerPositions[i]) || boostsPositions.Contains(playerPositions[i]))
             {
-                trapPosition = gameRandomizer.Next(1, fieldSize);
-                isCellBlocked = trapsPositions.Contains(trapPosition);
-                if (!isCellBlocked)
-                {
-                    trapsPositions[i] = trapPosition;
-                }
-            }
-            
-        }
-
-        isCellBlocked = true;
-        int[] boostsPositions = new int[trapsAmount - 2];
-        for (int i = 0; i < boostsPositions.Length; i++)
-        {
-            while (isCellBlocked) 
-            {
-                boostPosition = gameRandomizer.Next(1, fieldSize);
-                isCellBlocked = trapsPositions.Contains(boostPosition) && boostsPositions.Contains(boostPosition);
-                if (!isCellBlocked)
-                {
-                    boostsPositions[i] = boostPosition;
-                }
-            }
-             
-        }
-
-        Console.WriteLine("The game starts!");
-        while (ifgameContinues)
-        {
-            for (int i = 0; i < playerPositions.Length; i++)
-            {
-                Console.ForegroundColor = playerColors[i];
-                Console.WriteLine($"Player's {i + 1} turn!");
-                Console.ResetColor();
-                Console.Write("Press Enter to throw a dice: ");
-                Console.ReadLine();
-
-                diceResult = gameRandomizer.Next(1, diceSize);
-                playerPositions[i] += diceResult;
-                Console.ForegroundColor = playerColors[i];
-                Console.Write($"Player {i + 1} ");
-                Console.ResetColor();
-                Console.Write("moved on ");
-                Console.ForegroundColor = playerColors[i];
-                Console.Write($"{diceResult} ");
-                Console.ResetColor();
-                Console.WriteLine("squares");
-                if (playerPositions[i] >= fieldSize)
-                {
-                    Console.WriteLine("He is winner!");
-                    ifgameContinues = false;
-                    break;
-                }
-                else if (trapsPositions.Contains(playerPositions[i]))
+                if (trapsPositions.Contains(playerPositions[i]))
                 {
                     diceResult = gameRandomizer.Next(1, diceSize);
-                    playerPositions[i] -= diceResult;
-                    if (playerPositions[i] < 0) 
-                    {
-                        playerPositions[i] = 0;
-                    }
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write("Oh, It's a trap! ");
+                    Console.Write($"Oh, It's a trap on {playerPositions[i]}! ");
                     Console.ResetColor();
                     Console.ForegroundColor = playerColors[i];
                     Console.Write($"Player {i + 1} ");
                     Console.ResetColor();
                     Console.Write("moved backwards on ");
                     Console.ForegroundColor = playerColors[i];
-                    Console.Write($"{diceResult}. ");
-                    Console.ResetColor();
-                    Console.Write("His position is ");
-                    Console.ForegroundColor = playerColors[i];
-                    Console.Write($"{playerPositions[i]} ");
-                    Console.ResetColor();
-                    Console.WriteLine("now");
+                    Console.WriteLine($"{diceResult}.");
+                    playerPositions[i] -= diceResult;
+                    if (playerPositions[i] < 0)
+                    {
+                        playerPositions[i] = 0;
+                    }
+                    // Как только игрок попал на ловушку, то все, даже если вернулся на буст, то он не должен сработать (Обычно это так работает)
+                    break;
                 }
                 else if (boostsPositions.Contains(playerPositions[i]))
                 {
-                    playerPositions[i] += diceResult * boostSize;
                     Console.BackgroundColor = ConsoleColor.Green;
                     Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write("Wow, It's a boost! ");
+                    Console.Write($"Wow, It's a boost on {playerPositions[i]}! ");
                     Console.ResetColor();
                     Console.ForegroundColor = playerColors[i];
                     Console.Write($"Player {i + 1} ");
                     Console.ResetColor();
                     Console.Write("moved forward on ");
                     Console.ForegroundColor = playerColors[i];
-                    Console.Write($"{diceResult * boostSize}. ");
-                    Console.ResetColor();
-                    Console.Write("His position is ");
-                    Console.ForegroundColor = playerColors[i];
-                    Console.Write($"{playerPositions[i]} ");
-                    Console.ResetColor();
-                    Console.WriteLine("now");
+                    Console.WriteLine($"{diceResult * boostMultiplier}.");
+                    playerPositions[i] += diceResult * boostMultiplier;
+
                 }
-                else
-                {
-                    Console.Write("His position is ");
-                    Console.ForegroundColor = playerColors[i];
-                    Console.Write($"{playerPositions[i]} ");
-                    Console.ResetColor();
-                    Console.WriteLine("now");
-                }
-                Console.WriteLine();
             }
+
+            if (playerPositions[i] >= fieldSize)
+            {
+                Console.WriteLine("He is winner!");
+                isGameContinues = false;
+                break;
+            }
+            Console.ResetColor();
+            Console.Write("His position is ");
+            Console.ForegroundColor = playerColors[i];
+            Console.Write($"{playerPositions[i]} ");
+            Console.ResetColor();
+            Console.WriteLine("now");
+            Console.WriteLine();
+
         }
     }
-    else 
-    {
-        Console.WriteLine("Incorrect Input!");
-        Console.WriteLine();
-        continue;
-    }
     Console.ResetColor();
-    Console.Write("Try again? Y/anything: ");
+    Console.Write("Try again (Y)?: ");
     string oneMoreTry = Console.ReadLine() ?? string.Empty;
     isOneMoreTry = String.Compare(oneMoreTry, "Y") == 0;
 }
