@@ -16,7 +16,7 @@ while (isOneMoreTry)
     Console.Write("Enter amount of traps (there also will be some boosts in the game): ");
     bool isTrapsCorrect = int.TryParse(Console.ReadLine() ?? string.Empty, out int trapsAmount);
 
-    int trapsDifference = 2;
+    double trapsPart = 0.4;
 
     if (!(isPlayersCorrect && isSizeCorrect && isTrapsCorrect) || playersNum <= 0 || fieldSize <= 0 || trapsAmount <= 0)
     {
@@ -25,9 +25,9 @@ while (isOneMoreTry)
         continue;
     }
 
-    if (fieldSize - trapsAmount < trapsDifference)
+    if (fieldSize * trapsPart < trapsAmount)
     {
-        Console.WriteLine($"Amount of traps should be less than the size of the field on {trapsDifference}!");
+        Console.WriteLine("Amount of traps should be less than a 40% of the field size!");
         Console.WriteLine();
         continue;
     }
@@ -53,12 +53,13 @@ while (isOneMoreTry)
         while (isCellBlocked)
         {
             trapPosition = gameRandomizer.Next(1, fieldSize);
-            isCellBlocked = trapsPositions.Contains(trapPosition);
+            // Часть условия, чтобы не было случая, когда более 6 ловушек идет подряд, и игра, по сути, становится непроходимой
+            isCellBlocked = trapsPositions.Contains(trapPosition) || trapsPositions.Contains(trapPosition - 1) || trapsPositions.Contains(trapPosition + 1);
             if (!isCellBlocked)
             {
                 trapsPositions[i] = trapPosition;
             }
-        }   
+        }
     }
 
     int boostsAmount = trapsAmount - boostsDifference;
@@ -72,7 +73,7 @@ while (isOneMoreTry)
         boostsAmount = 0;
     }
     int[] boostsPositions;
-    
+
     boostsPositions = new int[boostsAmount];
     for (int i = 0; i < boostsPositions.Length; i++)
     {
@@ -88,6 +89,17 @@ while (isOneMoreTry)
         }
 
     }
+
+    foreach (int pos in trapsPositions) 
+    {
+        Console.Write($"{pos} ");
+    }
+    Console.WriteLine();
+    foreach (int pos in boostsPositions)
+    {
+        Console.Write($"{pos} ");
+    }
+    Console.WriteLine();
 
     while (isGameContinues)
     {
