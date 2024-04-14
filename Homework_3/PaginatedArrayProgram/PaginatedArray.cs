@@ -13,42 +13,49 @@ namespace PaginatedArrayProgram
         private T[] _items = new T[arrSize];
 
         private int _pageSize = pageSize;
-        //int[] someArr = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
         
-        // Переделать заполнение массива и получение страницы - поменять местами, добавить обработку неполной страницы
-        public T[] getPageData(int pageNumber)
+        public void addVal(T value, int place)
         {
-            int startIndex = (pageNumber - 1) * _pageSize;
-            int lastIndex = pageNumber * _pageSize;
-            if (lastIndex <= _items.Length)
+            try
             {
-                T[] pageData = new T[_pageSize];
-                Array.ConstrainedCopy(_items, startIndex, pageData, 0, pageSize);
-                return pageData;
+                _items[place] = value;
             }
-            // Обработка неполной страницы
-            /*else if (lastIndex - _pageSize < _items.Length)
+            // Хотя, по сути, выдаст ту же ошибку, даже если не обрабатывать
+            catch 
             {
-                T[] pageData = new T[_pageSize];
-                Array.ConstrainedCopy(_items, startIndex, pageData, 0, pageSize);
-                return pageData;
-            }*/
-            else
-            {
-                throw new ArgumentException("Index out of range");
+                throw new IndexOutOfRangeException();
             }
-            
-        }
+        }   
 
-        public int Size()
-        {
-            return _items.Length;
-        }
+        public int Length => _items.Length;
 
-        public T this[int index]
+        public T[] this[int index]
         {
-            get => _items[index];
-            set => _items[index] = value;
+            get
+            {
+                int startIndex = (index - 1) * _pageSize;
+                int lastIndex = index * _pageSize;
+                if (lastIndex <= _items.Length)
+                {
+                    T[] pageData = new T[_pageSize];
+                    Array.ConstrainedCopy(_items, startIndex, pageData, 0, pageSize);
+                    return pageData;
+                }
+                // Обработка неполной страницы
+                else if (lastIndex - _pageSize < _items.Length)
+                {
+                    T[] pageData = new T[_items.Length - startIndex];
+                    Array.ConstrainedCopy(_items, startIndex, pageData, 0, _items.Length - startIndex);
+                    return pageData;
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+            }
+            // По сути, не совсем корректно сеттер оставлять в обычном виде, поэтому вывел добавление значения в отдельный метод
+            //set => _items[index] = value;
         }
 
         public IEnumerator<T> GetEnumerator()

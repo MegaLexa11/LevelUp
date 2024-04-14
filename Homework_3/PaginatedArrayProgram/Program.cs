@@ -1,12 +1,12 @@
 ﻿using PaginatedArrayProgram;
 
-PaginatedArray<int> intArr = new PaginatedArray<int>(11, 2);
-for (int i = 0; i < intArr.Size(); i++) 
+PaginatedArray<int> intArr = new PaginatedArray<int>(13, 3);
+for (int i = 0; i < intArr.Length; i++) 
 {
-    intArr[i] = i + 1;
+    intArr.addVal(i + 1, i);
 }
 
-int[] page = intArr.getPageData(6);
+int[] page = intArr[5];
 
 foreach (int i in page)
 {
