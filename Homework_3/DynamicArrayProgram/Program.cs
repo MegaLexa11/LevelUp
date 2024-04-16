@@ -1,26 +1,26 @@
 ﻿
 using DynamicArrayProgram;
 
-DynamicArray<string> IntArr =  new();
-IntArr.Add("1");
-IntArr.Add("2");
-IntArr.Add("3");
-IntArr.Add("4");
-IntArr.Add("5");
-IntArr.Add("6");
-IntArr.Add("7");
-IntArr.Add("8");
-IntArr.Add("9");
+DynamicArray<string> intArr =  new();
+intArr.Add("1");
+intArr.Add("2");
+intArr.Add("3");
+intArr.Add("4");
+intArr.Add("5");
+intArr.Add("6");
+intArr.Add("7");
+intArr.Add("8");
+intArr.Add("9");
 
-IntArr.Remove("5");
-IntArr.Remove("7");
+intArr.Remove("5");
+intArr.Remove("7");
 
-foreach (string i in IntArr)
+foreach (string i in intArr)
 { 
     Console.WriteLine(i);
 }
 
-int index = IntArr.Search("6");
+int index = intArr.Search("6");
 Console.WriteLine(index);
-string item = IntArr[2];
+string item = intArr[2];
 Console.WriteLine(item);

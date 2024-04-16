@@ -14,17 +14,9 @@ namespace PaginatedArrayProgram
 
         private int _pageSize = pageSize;
         
-        public void addVal(T value, int place)
+        public void AddVal(T value, int place)
         {
-            try
-            {
-                _items[place] = value;
-            }
-            // Хотя, по сути, выдаст ту же ошибку, даже если не обрабатывать
-            catch 
-            {
-                throw new IndexOutOfRangeException();
-            }
+             _items[place] = value;
         }   
 
         public int Length => _items.Length;
@@ -33,8 +25,8 @@ namespace PaginatedArrayProgram
         {
             get
             {
-                int startIndex = (index - 1) * _pageSize;
-                int lastIndex = index * _pageSize;
+                int startIndex = (index) * _pageSize;
+                int lastIndex = (index + 1) * _pageSize;
                 if (lastIndex <= _items.Length)
                 {
                     T[] pageData = new T[_pageSize];
