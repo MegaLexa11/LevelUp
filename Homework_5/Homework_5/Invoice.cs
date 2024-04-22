@@ -19,7 +19,7 @@ namespace Homework_5
             StorageDestination = storageDestination;
         }
 
-        public void AddToInvoice(ProductItem item, int amount)
+        public void AddItem(ProductItem item, int amount)
         {
             if (ProductItems.ContainsKey(item)) 
             {

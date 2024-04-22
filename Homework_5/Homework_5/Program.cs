@@ -1,36 +1,40 @@
 ﻿
 using Homework_5;
 
-var prod1 = new ProductItem("Product 1", "Good one", "piece");
-var prod2 = new ProductItem("Product 2", "Good one", "piece");
-var prod3 = new ProductItem("Product 3", "Good one", "piece");
-var prod4 = new ProductItem("Product 4", "Good one", "piece");
-var prod5 = new ProductItem("Product 5", "Good one", "piece");
+var stock = new Stock();
 
-var storage = new Storage("Storage 1", 1, "City N");
-var storage2 = new Storage("Storage 2", 2, "City X");
+var prod1 = new ProductItem("Product 1", "Good one", "piece", 10, "RUB");
+var prod2 = new ProductItem("Product 2", "Good one", "piece", 20, "RUB");
+var prod3 = new ProductItem("Product 3", "Good one", "piece", 30, "RUB");
+var prod4 = new ProductItem("Product 4", "Good one", "piece", 40, "RUB");
+var prod5 = new ProductItem("Product 5", "Good one", "piece", 50, "RUB");
 
-var stock = new Stock(20);
+var storage = new Storage("Storage 1", 1, "City N", stock);
+var storage2 = new Storage("Storage 2", 2, "City X", stock);
 
 var invoice = new Invoice(storage);
-invoice.AddToInvoice(prod1, 2);
-invoice.AddToInvoice(prod2, 3);
-invoice.AddToInvoice(prod2, 5);
+invoice.AddItem(prod1, 2);
+invoice.AddItem(prod2, 3);
+invoice.AddItem(prod2, 5);
 
 stock.StoreItems(invoice);
 
 var invoice2 = new Invoice(storage);
-invoice2.AddToInvoice(prod1, 7);
-invoice2.AddToInvoice(prod3, 4);
+invoice2.AddItem(prod1, 7);
+invoice2.AddItem(prod3, 4);
 
 stock.StoreItems(invoice2);
 
 var invoice3 = new Invoice(storage2);
-invoice3.AddToInvoice(prod4, 7);
-invoice3.AddToInvoice(prod5, 4);
-invoice3.AddToInvoice(prod5, 1);
+invoice3.AddItem(prod4, 7);
+invoice3.AddItem(prod5, 4);
+invoice3.AddItem(prod5, 1);
 
 stock.StoreItems(invoice3);
 
+storage.PrintProducts();
+Console.WriteLine();
+storage2.PrintProducts();
 
-ProductInStorageMonitoring.PrintProducts();
+prod1.Price.UpdatePrice(12);
+Console.WriteLine(prod1.Price);

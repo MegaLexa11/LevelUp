@@ -11,25 +11,16 @@ namespace Homework_5
     internal class Stock
     {
         // Подумать еще над этой штукой
-        public List<ProductItem> Items { get; }
-        
-        public Stock(int baseSize)
-        {
-            Items = new List<ProductItem>(baseSize);
-        }
+        public List<ProductItem> Items { get; } = new List<ProductItem>();
 
         // Проверить
         public void AddToStock(ProductItem item)
         {
-            if (!Items.Contains(item))
+            bool ItemExistis = Items.Any(i => i.Id == item.Id); 
+            if (!ItemExistis)
             {
                 Items.Add(item);
             }
-        }
-
-        public ProductItem this[int index]
-        {
-            get => Items[index];
         }
 
         public void StoreItems(Invoice invoice)
@@ -39,9 +30,14 @@ namespace Homework_5
             foreach (var item in items) 
             {
                 AddToStock(item.Key);
-                ProductInStorageMonitoring.AddProductToStorage(item.Key, storage, item.Value);
+                storage.addItem(item.Key, item.Value);
             }
         }
-        // Какой-нибудь вывод общего числа товаров на складах, без привязки к складу или с привязкой - в принципе, пофиг
+
+        internal ProductItem GetItemById(Guid id)
+        {
+            ProductItem item = Items.Find(i => i.Id == id);
+            return item;
+        }
     }
 }
