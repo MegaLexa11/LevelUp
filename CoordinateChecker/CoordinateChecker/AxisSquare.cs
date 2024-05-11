@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CoordinateChecker
+﻿namespace CoordinateChecker
 {
 
     // Может, сделать AxisSquare???
@@ -21,30 +15,34 @@ namespace CoordinateChecker
         }
 
         // Предполагается, что в массиве нет одинаковых точек
-        public string ParallelTo()
+        public string PerpendicularTo()
         {
-            char[] parallelTo = new char[2];
-            int lastCharIndex = 0;
+            char perpendicularTo = 'X';
 
             AxisPoint point1 = PointsCoordinates[0];
             AxisPoint point2 = PointsCoordinates[1];
             AxisPoint point3 = PointsCoordinates[2];
 
             if (point1.X == point2.X && point1.X == point3.X) {
-                parallelTo[lastCharIndex++] = 'X';
+                perpendicularTo = 'X';
             }
 
             if (point1.Y == point2.Y && point1.Y == point3.Y)
             {
-                parallelTo[lastCharIndex++] = 'Y';
+                perpendicularTo = 'Y';
             }
 
             if (point1.Z == point2.Z && point1.Z == point3.Z)
             {
-                parallelTo[lastCharIndex++] = 'Z';
+                perpendicularTo = 'Z';
             }
 
-            return new string(parallelTo);
+            return perpendicularTo.ToString();
+        }
+
+        public override string ToString()
+        {
+            return String.Join('|', PointsCoordinates);
         }
     }
 }

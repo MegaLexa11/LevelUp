@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CoordinateChecker.Extensions;
+﻿using CoordinateChecker.Extensions;
 
 namespace CoordinateChecker.Builders
 {
@@ -12,7 +7,7 @@ namespace CoordinateChecker.Builders
         public static AxisSquare Build()
         {
             int pointsToMakeSquare = 4;
-            AxisPoint[] PlanePoints = new AxisPoint[pointsToMakeSquare];
+            AxisPoint[] SquarePoints = new AxisPoint[pointsToMakeSquare];
             double edgeLength;
             AxisPoint point1, point2, point3;
 
@@ -20,21 +15,23 @@ namespace CoordinateChecker.Builders
 
             // Пробовал сделать через цикл, но в каждой из 3 точек свои нюансы - в принципе, если бы для куба запрашивал все точки, то точно был бы цикл
             // Точка 1
+            Console.WriteLine("Point 1:");
             string[] coordinatesString = PointParser.GetPointCoordinates();
             point1 = PointBuilder.Build(coordinatesString);
-            PlanePoints[0] = point1;
+            SquarePoints[0] = point1;
             UserCommunicator.PointCommited();
 
 
             // Точка 2
+            Console.WriteLine("Point 2:");
             while (true)
             {
                 coordinatesString = PointParser.GetPointCoordinates();
                 point2 = PointBuilder.Build(coordinatesString);
-                if (CoordinateChecker.IsLineParallel(point2, point1) && !PlanePoints.Contains(point2))
+                if (Coordinates.IsLineParallel(point2, point1) && !SquarePoints.Contains(point2))
                 {
-                    PlanePoints[1] = point2;
-                    edgeLength = CoordinateChecker.DistanceBetweenPoints(point2, point1);
+                    SquarePoints[1] = point2;
+                    edgeLength = Coordinates.DistanceBetweenPoints(point2, point1);
                     break;
                 }
                 Console.WriteLine("The line, made of 2 points is not parallel to any of axes!");
@@ -42,14 +39,15 @@ namespace CoordinateChecker.Builders
             UserCommunicator.PointCommited();
 
             // Точка 3
+            Console.WriteLine("Point 3:");
             while (true)
             {
                 coordinatesString = PointParser.GetPointCoordinates();
                 point3 = PointBuilder.Build(coordinatesString);
-                double newEdgeLength = CoordinateChecker.DistanceBetweenPoints(point3, point2);
-                if (CoordinateChecker.IsLineParallel(point3, point2) && !PlanePoints.Contains(point3) && newEdgeLength == edgeLength)
+                double newEdgeLength = Coordinates.DistanceBetweenPoints(point3, point2);
+                if (Coordinates.IsLineParallel(point3, point2) && !SquarePoints.Contains(point3) && newEdgeLength == edgeLength)
                 {
-                    PlanePoints[2] = point3;
+                    SquarePoints[2] = point3;
                     break;
                 }
             }

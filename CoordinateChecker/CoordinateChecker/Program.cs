@@ -2,31 +2,26 @@
 
 using CoordinateChecker;
 using CoordinateChecker.Builders;
-using CoordinateChecker.Extensions;
 
-/*var point1 = new AxisPoint(1, 2, 3);
-var point2 = new AxisPoint(1, 2, 3);
 
-AxisPoint[] points = [point1];
+UserCommunicator.GreetUser();
+Console.WriteLine();
 
-Console.WriteLine(points.Contains(point2));
+AxisCube cube = CubeBuilder.Build();
+Console.WriteLine("Coordinates of the cube tops:");
+Console.WriteLine(cube);
+Console.WriteLine();
 
-int[] arr = [1, 2, 2, 4, 5, 1, 2, 7, 8, 9];
-int el = arr.RarestEl();
+Console.WriteLine("Now you will input coordinates of the point to know if it belongs to the cube.");
+string[] pointCoordinates = PointParser.GetPointCoordinates();
+AxisPoint point = PointBuilder.Build(pointCoordinates);
 
-Console.WriteLine(el);*/
-
-/*UserCommunicator.GreetUser();
-AxisSquare square = SquareBuilder.Build();
-
-foreach (AxisPoint point in square.PointsCoordinates)
+if(Coordinates.IsPointInCube(point, cube))
 {
-    Console.WriteLine($"{point.X} {point.Y} {point.Z}");
-}*/
-
-string string1 = "XYZ";
-string string2 = "XZ";
-
-string noIncluded = string2.AllNotIncluded(string1);
-Console.WriteLine(noIncluded);
-Console.WriteLine(noIncluded.Length);
+    Console.WriteLine($"Point {point} belongs to cube!");
+}
+else
+{
+    Console.WriteLine($"Point {point} doesn't belong to cube.");
+     
+}

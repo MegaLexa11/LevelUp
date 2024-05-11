@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CoordinateChecker
+﻿namespace CoordinateChecker
 {
     internal class AxisCube 
     {
@@ -12,13 +6,18 @@ namespace CoordinateChecker
         public AxisSquare AxisSquare1 { get; }
         public AxisSquare AxisSquare2 { get; }
 
-        public string SquaresParallelTo { get; }
+        public string SquaresPerpendicularTo { get; }
 
-        public AxisCube(AxisSquare axisPlane1, AxisSquare axisPlane2, string squaresParallelTo)
+        public AxisCube(AxisSquare axisPlane1, AxisSquare axisPlane2, string squaresPerpendicularTo)
         {
             AxisSquare1 = axisPlane1;
             AxisSquare2 = axisPlane2;
-            SquaresParallelTo = squaresParallelTo;
+            SquaresPerpendicularTo = squaresPerpendicularTo; 
+        }
+
+        public override string ToString()
+        {
+            return $"{AxisSquare1}|{AxisSquare2}";
         }
     }
 }

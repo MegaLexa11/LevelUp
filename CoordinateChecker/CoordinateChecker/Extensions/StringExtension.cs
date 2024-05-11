@@ -8,6 +8,7 @@ namespace CoordinateChecker.Extensions
 {
     internal static class StringExtension
     {
+        // Чтобы узнавать, каким осям параллельна плоскость
         public static string AllNotIncluded(this string baseStr, string compareStr)
         {
             char[] charArr = new char[compareStr.Length];
