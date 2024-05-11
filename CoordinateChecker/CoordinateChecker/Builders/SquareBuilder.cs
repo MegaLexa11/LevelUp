@@ -45,7 +45,7 @@ namespace CoordinateChecker.Builders
                 coordinatesString = PointParser.GetPointCoordinates();
                 point3 = PointBuilder.Build(coordinatesString);
                 double newEdgeLength = Coordinates.DistanceBetweenPoints(point3, point2);
-                if (Coordinates.IsLineParallel(point3, point2) && !SquarePoints.Contains(point3) && newEdgeLength == edgeLength)
+                if (Coordinates.IsLineParallel(point3, point2) && !Coordinates.IsLineParallel(point3, point1) && !SquarePoints.Contains(point3) && newEdgeLength == edgeLength)
                 {
                     SquarePoints[2] = point3;
                     break;
