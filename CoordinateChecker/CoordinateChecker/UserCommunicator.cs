@@ -8,9 +8,10 @@
             Console.WriteLine("You will have to input coordinates of cube's tops.");
             Console.WriteLine("Here are the main rules how to do it:");
             Console.WriteLine("1) Input coordinates one by another. The program will check them to be correct (the first is X, the second is Y, the third is Z);");
-            Console.WriteLine("2) You will input coordinates of three points, then the program will make a cube automatically, asking  direction for it to grow;");
-            Console.WriteLine("3) Cube edges should be parallel to axes;");
-            Console.WriteLine("4) Use only integers - they can be either positive or negative;");
+            Console.WriteLine("2) Coordinates should belong to a square, parallel to one of three main planes (xOy, xOz, yOz);");
+            Console.WriteLine("3) You will input coordinates of three points, then the program will make a cube automatically, asking  direction for it to grow;");
+            Console.WriteLine("4) Cube edges should be parallel to axes;");
+            Console.WriteLine("5) Use only integers - they can be either positive or negative;");
         }
 
         public static void PointCommited()
