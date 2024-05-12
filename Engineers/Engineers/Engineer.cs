@@ -8,6 +8,7 @@ namespace Engineers
 {
     internal record Engineer(EngineerLevel Level, string[] Responsibilities)
     {   
-        public Guid Id = Guid.NewGuid();
+        // set тут, конечно, не оч совсем
+        public Guid Id { get; set; } = Guid.NewGuid();
     }
 }
