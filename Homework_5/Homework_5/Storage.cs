@@ -31,7 +31,7 @@ namespace Homework_5
             Stock = stock;
         }
 
-        public void addItem(ProductItem item, int? amount = null)
+        public void AddItem(ProductItem item, int? amount = null)
         {
             amount = amount ?? 1;
             if (ProductRest.ContainsKey(item.Id))

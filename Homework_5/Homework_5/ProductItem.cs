@@ -9,7 +9,7 @@ namespace Homework_5
     // Сущность товара
     internal class ProductItem
     {
-        public Guid Id;
+        public Guid Id { get; }
 
         public string Name { get; set; }
 
@@ -17,7 +17,7 @@ namespace Homework_5
 
         public string Measure { get; }
 
-        public ItemPrice Price;
+        public ItemPrice Price { get; }
 
         public ProductItem(string name, string? description, string measure, int price, string currency)
         {

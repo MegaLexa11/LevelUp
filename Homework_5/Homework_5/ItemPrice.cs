@@ -11,7 +11,7 @@ namespace Homework_5
 
         public int Price { get; set; }
 
-        Dictionary<DateTime, int> PriceStory = new Dictionary<DateTime, int>();
+        public Dictionary<DateTime, int> PriceStory = new Dictionary<DateTime, int>();
 
         public string Currency { get; }
 
