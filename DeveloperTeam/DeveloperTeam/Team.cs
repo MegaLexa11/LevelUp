@@ -12,7 +12,7 @@
             Workers.AddRange(workers);
         }
 
-        public void addWorker(Worker worker) 
+        public void AddWorker(Worker worker) 
         {
             Workers.Add(worker);
         }

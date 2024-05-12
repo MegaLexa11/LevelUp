@@ -1,9 +1,9 @@
-﻿namespace DeveloperTeam
+﻿using System.ComponentModel;
+
+namespace DeveloperTeam
 {
     internal class Analytic : Engineer
     {
-
-        public override Position Position => Position.Analytic;
         public AnalyticSpecialization Specialization { get; }
 
         public Analytic(string name, AnalyticSpecialization specialization, Level level)
@@ -14,7 +14,7 @@
 
         public override string ToString()
         {
-            return $"{Name}, {Position}, {Specialization}, {Level}";
+            return $"{Name}, {typeof(Analytic).Name}, {Specialization}, {Level}";
         }
     }
 }

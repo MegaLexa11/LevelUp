@@ -1,8 +1,11 @@
-﻿namespace DeveloperTeam
+﻿using System.ComponentModel;
+using System.Globalization;
+using System.Reflection.Metadata;
+
+namespace DeveloperTeam
 {
     internal class QAEngineer : Engineer
     {
-        public override Position Position => Position.QAEngineer;
         public QASpecialization Specialization { get; }
 
         public QAEngineer(string name, QASpecialization specialization, Level level)
@@ -13,7 +16,7 @@
 
         public override string ToString()
         {
-            return $"{Name}, {Position}, {Specialization}, {Level}";
+            return $"{Name}, {typeof(QAEngineer).Name}, {Specialization}, {Level}";
         }
     }
 }
