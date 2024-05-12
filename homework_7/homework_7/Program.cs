@@ -6,23 +6,25 @@ Console.WriteLine("1. Прямоугольник");
 Console.WriteLine("2. Круг");
 Console.Write("Введите номер фигуры, площадь которой хотите рассчитать: ");
 var figureNum = Console.ReadLine();
-IFigure figure;
-double square;
+// Ранее тут было лишнее повторение кода, так как в свитч кейсе обрабатывался неверный ввод, из-за которого, по сути, программа не отрабатывала, и было бы нелогично потом вызывать расчет площади и т.п.
+// Поэтому вначале пусть ввод фигуры обрабатывается так:
+while (figureNum != "1" && figureNum != "2")
+{
+    Console.WriteLine("Неверный ввод!");
+    figureNum = Console.ReadLine();
+}
+
+// Конечно, создается лишний билдер, если вдруг результат 2...
+IFigureBuilder figureBuilder = new RectangleBuilder(new RectangleParser());
 switch (figureNum)
 {
     case "1":
-        RectangleBuilder rectangleBuilder = new RectangleBuilder(new RectangleParser());
-        figure = rectangleBuilder.Build();
-        square = figure.EvaluateSquare();
-        Console.WriteLine($"Площадь фигуры: {square}");
         break;
     case "2":
-        CircleBuilder circleBuilder = new CircleBuilder(new CircleParser());
-        figure = circleBuilder.Build();
-        square = figure.EvaluateSquare();
-        Console.WriteLine($"Площадь фигуры: {square}");
-        break;
-    default:
-        Console.WriteLine("Неверный ввод!");
+        figureBuilder = new CircleBuilder(new CircleParser());
         break;
 }
+
+IFigure figure = figureBuilder.Build();
+double square = figure.EvaluateSquare();
+Console.WriteLine($"Площадь фигуры: {square}");
