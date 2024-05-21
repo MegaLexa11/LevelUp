@@ -15,16 +15,19 @@ while (figureNum != "1" && figureNum != "2")
 }
 
 // Конечно, создается лишний билдер, если вдруг результат 2...
-IFigureBuilder figureBuilder = new RectangleBuilder(new RectangleParser());
+IFigureBuilder? figureBuilder = null;
 switch (figureNum)
 {
     case "1":
+        figureBuilder = new RectangleBuilder(new RectangleParser());
         break;
     case "2":
         figureBuilder = new CircleBuilder(new CircleParser());
         break;
 }
-
-IFigure figure = figureBuilder.Build();
-double square = figure.EvaluateSquare();
-Console.WriteLine($"Площадь фигуры: {square}");
+if (figureBuilder != null)
+{
+    IFigure figure = figureBuilder.Build();
+    double square = figure.EvaluateSquare();
+    Console.WriteLine($"Площадь фигуры: {square}");
+}
