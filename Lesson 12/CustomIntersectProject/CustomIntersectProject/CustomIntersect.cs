@@ -2,36 +2,24 @@
 {
     internal static class CustomIntersect
     {
-        public static IEnumerable<T> IntersectArr<T>(this IEnumerable<T> firstArr, IEnumerable<T> secondArr)
+        public static IEnumerable<T> Intersect<T>(this IEnumerable<T> firstEnum, IEnumerable<T> secondEnum)
         {
-            int maxLength = Math.Max(firstArr.Count(), secondArr.Count());
             var dictionary = new Dictionary<T, int>();
 
-            foreach (var item in firstArr)
+            foreach (var item in firstEnum)
             {
-                AddToDict(item, dictionary);
+                if (!dictionary.ContainsKey(item))
+                {
+                    dictionary[item] = 1;
+                }
             }
-            foreach (var item in secondArr)
+            foreach (var item in secondEnum)
             {
-                AddToDict(item, dictionary);
-            }
-
-            var result = from pair in dictionary
-                            where pair.Value > 1
-                            select pair.Key;
-
-            return result;
-        }
-
-        private static void AddToDict<T>(T el, Dictionary<T, int> dict)
-        {
-            if (dict.ContainsKey(el))
-            {
-                dict[el] += 1;
-            }
-            else
-            {
-                dict[el] = 1;
+                if (dictionary.ContainsKey(item) && dictionary[item] == 1)
+                {
+                    dictionary[item] += 1;
+                    yield return item;
+                }
             }
         }
     }

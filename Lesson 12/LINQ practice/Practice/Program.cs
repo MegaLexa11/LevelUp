@@ -21,7 +21,7 @@ Console.WriteLine();
 // 2. Вывести список товаров категории "Товары для спорта" в порядке по убыванию
 
 
-var sportItems = nomenclature.Items.Where(item => item.Category.Name == "Товары для спорта").OrderBy(item => item.Name);
+var sportItems = nomenclature.Items.Where(item => item.Category.Name == "Товары для спорта").OrderByDescending(item => item.Name);
 foreach(var sportItem in sportItems)
 {
     Console.WriteLine(sportItem);
@@ -31,19 +31,24 @@ Console.WriteLine();
 // 3. Вывести самый дешевый товар категории "Офисные товары и канцелярия"
 
 var officeItems = nomenclature.Items.Where(item => item.Category.Name == "Офисные товары и канцелярия");
-var officeItemsWithPrice = officeItems.Join(
+var officeItemsWithLowestPrice = officeItems.Join(
     nomenclature.PriceHistory.Where(item => item.Value.History.Count > 0),
     i => i.Id,
     ph => ph.Key,
-    (i, ph) => new { ID = i.Id, Name = i.Name, Price = ph.Value.History.Min(item => item.Price) }).OrderBy(item => item.Price);
-var cheapestItem = officeItemsWithPrice.FirstOrDefault();
-Console.WriteLine(cheapestItem);
+    (i, ph) => new { ID = i.Id, Name = i.Name, Price = ph.Value.History.OrderByDescending(item => item.Date).FirstOrDefault().Price})
+    .GroupBy(item => item.Price)
+    .OrderBy(item => item.Key)
+    .FirstOrDefault();
+foreach (var officeItem in officeItemsWithLowestPrice)
+{
+    Console.WriteLine(officeItem);
+}
 Console.WriteLine();
 
 
 // 4. Вывести товары, у которых отсутствует цена в истории цен
 
-var itemsWithoutPrice = nomenclature.Items.Where(item => nomenclature.PriceHistory[item.Id].History.Count() == 0);
+var itemsWithoutPrice = nomenclature.Items.Where(item => !(nomenclature.PriceHistory.ContainsKey(item.Id)) || nomenclature.PriceHistory[item.Id].History.Count() == 0);
 foreach (var item in itemsWithoutPrice)
 {
     Console.WriteLine(item);
@@ -53,7 +58,7 @@ Console.WriteLine();
 
 // 5. Вывести товары, у которых цена менялась наибольшее количество раз
 var itemsWithFrequentPrice = nomenclature.Items.Where(
-    item => nomenclature.PriceHistory[item.Id].History.Count() == 
+    item => nomenclature.PriceHistory.ContainsKey(item.Id) && nomenclature.PriceHistory[item.Id].History.Count() == 
         nomenclature.PriceHistory.Max(item => item.Value.History.Count()));
 foreach (var item in itemsWithFrequentPrice)
 {
@@ -63,15 +68,15 @@ Console.WriteLine();
 
 // 6. Вывести товары, у которых цена менялась наименьшее количество времени назад
 var itemsWithPrice = nomenclature.PriceHistory.Where(item => item.Value.History.Count > 0).ToDictionary();
-var MinDayDifference = itemsWithPrice.Min(item => item.Value.History.
+var minDayDifference = itemsWithPrice.Min(item => item.Value.History.
     Min(item => (DateTime.Today - item.Date).TotalDays));
 
-var LastUpadatedPriceItems = nomenclature.Items
-    .Where(item => nomenclature.PriceHistory[item.Id].History.Count() > 0) // Наверно, не самое изящное решение, но работает
-    .Where(item => nomenclature.PriceHistory[item.Id].History
-        .Min(item => (DateTime.Today - item.Date).TotalDays) == MinDayDifference);
+var lastUpadatedPriceItems = nomenclature.Items
+    .Where(item => nomenclature.PriceHistory.ContainsKey(item.Id) && nomenclature.PriceHistory[item.Id].History.Count() > 0) // Наверно, не самое изящное решение, но работает
+    .Where(item => nomenclature.PriceHistory.ContainsKey(item.Id) && nomenclature.PriceHistory[item.Id].History
+        .Min(item => (DateTime.Today - item.Date).TotalDays) == minDayDifference);
 
-foreach (var item in LastUpadatedPriceItems)
+foreach (var item in lastUpadatedPriceItems)
 {
     Console.WriteLine(item);
 }
@@ -79,8 +84,14 @@ Console.WriteLine();
 
 // 7. Вывести день, в который произошло наибольшее количество изменений цен товаров, и количество таких изменений
 // Тут мозг отказался подумать
-var productPriceChangeDateDict = nomenclature.PriceHistory.Select(Item => Item.Value.History.Select(item => item.Date)); 
-Console.WriteLine(productPriceChangeDateDict.Count());
+var mostFrequentDate = nomenclature.PriceHistory
+    .SelectMany(Item => Item.Value.History)
+    .GroupBy(item => item.Date)
+    .OrderByDescending(item => item.Count())
+    .FirstOrDefault()
+    .Key;
+
+Console.WriteLine(mostFrequentDate);
 Console.WriteLine();
 
 // 8. Вывести перечень категорий с их средней ценой за товар
@@ -124,8 +135,8 @@ var categoriesWithItemsAndPrices = nomenclature.Items.Join(
     (i, ip) => new { Category = i.Category.Name, Name = i.Name, Price = ip.Price }
     );
 
-var CategoriesWithItemsFilteredByPrice = categoriesWithItemsAndPrices.Where(item => categoryNames.Contains(item.Category) && item.Price > priceToCheck);
-foreach (var item in CategoriesWithItemsFilteredByPrice)
+var categoriesWithItemsFilteredByPrice = categoriesWithItemsAndPrices.Where(item => categoryNames.Contains(item.Category) && item.Price > priceToCheck);
+foreach (var item in categoriesWithItemsFilteredByPrice)
 {
     Console.WriteLine(item);
 }
