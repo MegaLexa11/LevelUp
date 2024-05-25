@@ -1,6 +1,14 @@
 ﻿
 using ObservableListProgram;
 
-var notifier = new ObservableListNotifier<int>();
 var someList = new ObservableList<int>();
-someList.Add(2, notifier);
+var newItem = 2;
+var newItem2 = 3;
+
+someList.Remove(newItem);
+someList.Add(newItem);
+someList.Add(newItem);
+someList.Add(newItem2);
+someList.Remove(newItem);
+
+

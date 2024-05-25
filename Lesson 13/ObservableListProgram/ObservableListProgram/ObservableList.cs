@@ -1,24 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ObservableListProgram
+﻿namespace ObservableListProgram
 {
     internal class ObservableList<T>
     {
         public List<T> list;
 
-        public void Add(T item, ObservableListNotifier<T> notifier)
+        public delegate void NewItem(string itemActionText);
+
+        public event NewItem? NewItemAddedEvent;
+
+        public void Add(T item)
         {
             list.Add(item);
-            notifier.NewItemAddedEvent += PrintNewItemEvent;
+            NewItemAddedEvent?.Invoke($"Added new item - {item}");
         }
 
-        public void Remove(T item)
+        public bool Remove(T item)
         {
-            list.Remove(item);
+            bool isRemoved = list.Remove(item);
+            if (isRemoved) 
+            {
+                NewItemAddedEvent?.Invoke($"Removed item - {item}");
+            } 
+            else
+            {
+                NewItemAddedEvent?.Invoke($"There is no item {item} in list");
+            }
+            
+            return isRemoved;
         }
 
         public int Count()
@@ -29,11 +37,12 @@ namespace ObservableListProgram
         public ObservableList() 
         {
             list = new List<T>();
+            NewItemAddedEvent += PrintItemAction;
         }
 
-        private void PrintNewItemEvent(T item)
+        private void PrintItemAction(string actionText)
         {
-            Console.WriteLine($"Added new Item - {item}");
+            Console.WriteLine(actionText);
         }
     }
 }
