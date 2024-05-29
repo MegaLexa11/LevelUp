@@ -42,7 +42,7 @@ namespace DeveloperTeam.Team_Validator
             }
 
             var webDevelopersAmount = developers.Count(worker => worker.Specialization == DeveloperSpecialization.Web);
-            if (webDevelopersAmount >= 1 && webDevelopersAmount <= 2)
+            if (webDevelopersAmount < 1 || webDevelopersAmount > 2)
             {
                 throw new WebDevelopersAmountException();
             }
