@@ -9,6 +9,7 @@ var productItems = new[]
     new ProductItem(Guid.NewGuid(), "Щитки", "Аммуниция"),
 };
 
+//var filePath = "C:\\Users\\kukh9\\Desktop\\LevelUp\\products.txt";
 var filePath = "products.txt";
 IProductsStorage fileStorage = new FileStorage(filePath);
 
