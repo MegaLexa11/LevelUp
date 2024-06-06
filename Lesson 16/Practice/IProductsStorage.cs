@@ -2,7 +2,7 @@ namespace Practice;
 
 public interface IProductsStorage
 {
-    Task Save(IEnumerable<ProductItem> productItems);
+    Task Save(IEnumerable<ProductItem> productItems, bool isOverwrite);
     Task Save(ProductItem productItems);
 
     Task<IEnumerable<ProductItem>> Fetch();
