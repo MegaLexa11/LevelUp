@@ -28,7 +28,7 @@ namespace TravelCardProgram.Models.Configurations
             // Тут что-то не так
             builder.HasOne(item => item.TravelCard)
                 .WithOne(item => item.Account)
-                .HasForeignKey<Account>(item => item.TravelCardId)
+                .HasForeignKey<TravelCard>(item => item.AccountId)
                 .IsRequired();
 
         }
