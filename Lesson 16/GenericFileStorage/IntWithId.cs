@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace GenericFileStorage
 {
-    internal class IntWithId: IContainsId
+    internal class IntWithId: IContainsId<int>
     {
-        public Guid Id { get; }
+        public Guid Id { get; } = Guid.NewGuid();
 
-        public int Num { get; }
+        public int Value { get; }
 
-        public IntWithId(int num)
+        public IntWithId(int value)
         {
-            Id = Guid.NewGuid();
-            Num = num;
+            Value = value;
         }
     }
 }

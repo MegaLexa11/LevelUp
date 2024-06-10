@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace GenericFileStorage
 {
-    internal interface IContainsId
+    internal interface IContainsId<T>
     {
         public Guid Id { get; }
+
+        public T Value { get; }
 
     }
 }

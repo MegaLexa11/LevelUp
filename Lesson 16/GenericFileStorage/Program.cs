@@ -1,20 +1,27 @@
 ﻿using GenericFileStorage;
 
-var storage = new FileDataStorage("items.txt");
+var storage1 = new FileDataStorage<StrWithId>("items.txt");
 
-IContainsId numItem = new IntWithId(1);
-IContainsId strItem = new StrWithId("a");
-IContainsId strItem2 = new StrWithId("b");
+StrWithId strItem = new StrWithId("a");
+StrWithId strItem2 = new StrWithId("b");
 
-IContainsId[] items = [numItem, strItem];
+StrWithId[] items = [strItem, strItem2];
+Console.WriteLine(strItem.Id);
 
+await storage1.Save(items, true);
 
-await storage.Save(items, true);
-
-await storage.Save(strItem2);
-
-/*var restoredItems = await storage.Fetch();
+storage1 = new FileDataStorage<StrWithId>("items.txt");
+var restoredItems = await storage1.Fetch();
 foreach (var item in restoredItems)
 {
-    Console.WriteLine(item);
-}*/
+    Console.WriteLine(item.Id);
+    Console.WriteLine(item.Value);
+}
+Console.WriteLine();
+
+
+var foundItems = await storage1.FetchById(strItem.Id);
+foreach (var item in foundItems)
+{
+    Console.WriteLine($"{item.Id} {item.Value}");
+}

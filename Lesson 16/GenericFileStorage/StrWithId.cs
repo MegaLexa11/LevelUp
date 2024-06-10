@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GenericFileStorage
+﻿namespace GenericFileStorage
 {
-    internal class StrWithId: IContainsId
+    internal class StrWithId: IContainsId<String>
     {
-        public Guid Id { get; }
+        public Guid Id { get; } = Guid.NewGuid();
 
-        public string Str { get; }
+        public string Value { get; }
 
-        public StrWithId(string str)
+        public StrWithId(string value)
         {
-            Id = Guid.NewGuid();
-            Str = str;
+            Value = value;
         }
     }
 }

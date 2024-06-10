@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GenericFileStorage
 {
-    internal class FileDataStorag<T>(string filePath): IDataStorage<T>
+    internal class FileDataStorage<T>(string filePath): IDataStorage<T>
     {
         public async Task Save(IEnumerable<T> items, bool IsOverwrite)
         {
@@ -17,8 +17,8 @@ namespace GenericFileStorage
             {
                 var existingItems = await Fetch();
                 var ItemsToAdd = items.
-                    Where(item => !existingItems.Select(exItem => exItem.Id).
-                    Contains(item.Id));
+                    Where(item => !existingItems.Select(exItem => exItem.GetType().GetProperty("Id").GetValue(exItem).ToString()).
+                    Contains(item.GetType().GetProperty("Id").GetValue(item).ToString()));
                 items = existingItems.Concat(ItemsToAdd);
             }
 
@@ -41,14 +41,14 @@ namespace GenericFileStorage
             await stream.WriteAsync(bytes);
         }
 
-        public async Task Save(T Item)
+        public async Task Save(T item)
         {
             var existingItems = await Fetch();
-            if (!existingItems.Any(itemEx => itemEx.Id == Item.Id))
+            if (!existingItems.Any(itemEx => itemEx.GetType().GetProperty("Id").GetValue(itemEx).ToString() == item.GetType().GetProperty("Id").GetValue(item).ToString()))
             {
                 await using var stream = File.OpenWrite(filePath);
 
-                existingItems = existingItems.Append(Item);
+                existingItems = existingItems.Append(item);
 
                 var options = new JsonSerializerOptions
                 {
@@ -69,17 +69,21 @@ namespace GenericFileStorage
             var content = await File.ReadAllTextAsync(filePath);
 
             // Десериализуем в IEnumerable<ProductItem>
-            var items = JsonSerializer.Deserialize<IEnumerable<IContainsId>>(content)
-                               ?? Enumerable.Empty<IContainsId>();
+            var items = JsonSerializer.Deserialize<IEnumerable<T>>(content)
+                               ?? Enumerable.Empty<T>();
 
-            // Возвращаем нужные нам объекты
             return items;
         }
 
         public async Task<IEnumerable<T>> FetchById(Guid Id)
         {
             var items = await Fetch();
-            return items.Where(item => item.Id == Id);
+            
+            /*foreach (var item in items)
+            {
+                Console.WriteLine(item.GetType().GetProperty("Id").GetValue(item).ToString());
+            }*/
+            return items.Where(item => item.GetType().GetProperty("Id").GetValue(item).ToString() == Id.ToString());
         }
     }
 }
