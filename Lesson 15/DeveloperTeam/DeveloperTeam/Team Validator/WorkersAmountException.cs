@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeveloperTeam.Team_Validator
 {
-    internal class WorkersAmountException(string description): Exception("Incorrect worker amount!")
+    internal class WorkersAmountException(string description): Exception(description)
     {
     }
 }
