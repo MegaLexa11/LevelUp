@@ -20,9 +20,16 @@ var mostFrequentDate = nomenclature.PriceHistory
     .SelectMany(item => item.Value.History)
     .GroupBy(item => item.Date)
     .Select(item => new { Date = item.Key, ItemsChanged = item.Count() }) // Немного натянутое решение, но, возможно, так лучше воспринимается
-    .OrderByDescending(item => item.ItemsChanged)
+    .GroupBy(item => item.ItemsChanged)
+    .OrderByDescending(item => item.Key)
     .FirstOrDefault();
-Console.WriteLine(mostFrequentDate.Date);
+    
+
+foreach(var item in mostFrequentDate)
+{
+    Console.WriteLine(item.Date);
+}
+
 
 Console.WriteLine();
 
