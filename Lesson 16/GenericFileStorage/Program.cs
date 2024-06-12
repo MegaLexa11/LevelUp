@@ -2,15 +2,19 @@
 
 var storage1 = new FileDataStorage<StrWithId>("items.txt");
 
-StrWithId strItem = new StrWithId("a");
-StrWithId strItem2 = new StrWithId("b");
+StrWithId strItem = new StrWithId("F");
+StrWithId strItem2 = new StrWithId("C");
 
 StrWithId[] items = [strItem, strItem2];
 Console.WriteLine(strItem.Id);
+Console.WriteLine(strItem.Value);
+Console.WriteLine(strItem2.Id);
+Console.WriteLine(strItem2.Value);
+Console.WriteLine();
 
-await storage1.Save(items, true);
 
-storage1 = new FileDataStorage<StrWithId>("items.txt");
+await storage1.Save(items, false);
+
 var restoredItems = await storage1.Fetch();
 foreach (var item in restoredItems)
 {
