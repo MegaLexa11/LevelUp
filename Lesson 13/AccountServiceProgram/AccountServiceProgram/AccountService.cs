@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AccountServiceProgram
+﻿namespace AccountServiceProgram
 {
     internal class AccountService
     {
+        private PrintCreationInfo _userNotification;
+
+        public AccountService()
+        {
+            _userNotification = new PrintCreationInfo(CheckBlacklist);
+            _userNotification += CheckAccountType;
+            _userNotification += RegisterAccount;
+            _userNotification += NotifyUser;
+        }
+
         public BankAccount CreateAccount(string ownerName, string accountType)
         {
-            PrintCreationInfo userNotification = new PrintCreationInfo(CheckBlacklist);
-            userNotification += new PrintCreationInfo(CheckAccountType);
-            
-            BankAccount account = new BankAccount(ownerName, accountType);
-
-            userNotification += new PrintCreationInfo(RegisterAccount);
-            userNotification += new PrintCreationInfo(NotifyUser);
-
-            userNotification(ownerName, accountType);
-
+            _userNotification.Invoke(ownerName, accountType);
             return new BankAccount(ownerName, accountType);
         }
 

@@ -4,14 +4,14 @@
     {
         public List<T> list;
 
-        public delegate void NewItem(string itemActionText);
+        public delegate void ActionItem(string itemActionText);
 
-        public event NewItem? NewItemAddedEvent;
+        public event ActionItem? ActionItemEvent;
 
         public void Add(T item)
         {
             list.Add(item);
-            NewItemAddedEvent?.Invoke($"Added new item - {item}");
+            ActionItemEvent?.Invoke($"Added new item - {item}");
         }
 
         public bool Remove(T item)
@@ -19,13 +19,9 @@
             bool isRemoved = list.Remove(item);
             if (isRemoved) 
             {
-                NewItemAddedEvent?.Invoke($"Removed item - {item}");
+                ActionItemEvent?.Invoke($"Removed item - {item}");
             } 
-            else
-            {
-                NewItemAddedEvent?.Invoke($"There is no item {item} in list");
-            }
-            
+
             return isRemoved;
         }
 
@@ -37,7 +33,7 @@
         public ObservableList() 
         {
             list = new List<T>();
-            NewItemAddedEvent += PrintItemAction;
+            ActionItemEvent += PrintItemAction;
         }
 
         private void PrintItemAction(string actionText)
