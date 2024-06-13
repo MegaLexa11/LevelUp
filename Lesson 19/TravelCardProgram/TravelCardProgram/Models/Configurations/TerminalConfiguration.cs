@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace TravelCardProgram.Models.Configurations
 {
-    internal class TripInfoConfiguration : IEntityTypeConfiguration<TripInfo>
+    internal class TerminalConfiguration : IEntityTypeConfiguration<Terminal>
     {
-        public void Configure(EntityTypeBuilder<TripInfo> builder)
+        public void Configure(EntityTypeBuilder<Terminal> builder)
         {
-            builder.ToTable("trips_info");
+            builder.ToTable("terminals");
 
             builder.HasKey(item => item.Id);
 
@@ -26,7 +25,10 @@ namespace TravelCardProgram.Models.Configurations
                 .HasColumnName("transport_type")
                 .HasColumnType("int")
                 .IsRequired();
-        }
 
+            builder.HasMany(item => item.Trips)
+                .WithOne(item => item.Terminal)
+                .HasForeignKey(item => item.TerminalId);
+        }
     }
 }

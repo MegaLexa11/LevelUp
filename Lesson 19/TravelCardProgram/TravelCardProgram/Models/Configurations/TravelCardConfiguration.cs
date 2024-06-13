@@ -41,6 +41,12 @@ namespace TravelCardProgram.Models.Configurations
                 .HasColumnType("int")
                 .IsRequired(); ;
 
+            builder.Ignore(item => item.HighCoefficientActive);
+
+            builder.Property(item => item.HighCoefficientExpiration)
+                .HasColumnName("high_coefficient_expiration")
+                .HasColumnType("timestamp");
+
             builder.HasOne(item => item.Passenger)
                 .WithMany(item => item.TravelCards)
                 .HasForeignKey(item => item.PassengerId)
@@ -50,6 +56,10 @@ namespace TravelCardProgram.Models.Configurations
                 .WithMany(item => item.TravelCards)
                 .HasForeignKey(item => item.TariffId)
                 .IsRequired();
+
+            builder.HasMany(item => item.Trips)
+                .WithOne(item => item.TravelCard)
+                .HasForeignKey(item => item.TravelCardId);
         }
     }
 }
