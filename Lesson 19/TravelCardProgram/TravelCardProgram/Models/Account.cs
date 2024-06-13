@@ -4,7 +4,9 @@
     {
         public Guid Id { get; }
         public double? Balance { get; set; }
-        public Guid TravelCardId { get; init; }
+
+        //Вроде, это не нужно
+        //public Guid TravelCardId { get; init; }
 
         public TravelCard TravelCard { get; init; } = default!;
     }

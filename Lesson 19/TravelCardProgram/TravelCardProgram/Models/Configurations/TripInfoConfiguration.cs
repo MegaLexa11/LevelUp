@@ -13,7 +13,7 @@ namespace TravelCardProgram.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<TripInfo> builder)
         {
-            builder.ToTable("trips");
+            builder.ToTable("trips_info");
 
             builder.HasKey(item => item.Id);
 
@@ -22,23 +22,10 @@ namespace TravelCardProgram.Models.Configurations
                 .HasColumnType("uuid")
                 .IsRequired();
 
-            builder.Property(item => item.Price)
-                .HasColumnName("price")
-                .HasColumnType("float");
-
             builder.Property(item => item.TransportType)
                 .HasColumnName("transport_type")
                 .HasColumnType("int")
                 .IsRequired();
-
-            // тут что-то может быть не так
-            builder.HasMany(item => item.Rates)
-                .WithOne(item => item.Trip)
-                .HasForeignKey(item => item.UndergroundTripId);
-
-            builder.HasMany(item => item.Rates)
-                .WithOne(item => item.Trip)
-                .HasForeignKey(item => item.GroundTripId);
         }
 
     }

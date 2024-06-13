@@ -22,15 +22,12 @@ namespace TravelCardProgram.Models.Configurations
                 .IsRequired();
 
             builder.Property(item => item.Balance)
-                .HasColumnName("Balance")
-                .HasColumnType("float");
+                .HasColumnName("balance")
+                .HasColumnType("decimal");
 
-            // Тут что-то не так
             builder.HasOne(item => item.TravelCard)
                 .WithOne(item => item.Account)
-                .HasForeignKey<TravelCard>(item => item.AccountId)
-                .IsRequired();
-
+                .HasForeignKey<TravelCard>(item => item.AccountId);
         }
     }
 }

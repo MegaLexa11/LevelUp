@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace TravelCardProgram.Models.Configurations
 {
-    internal class UserConfiguration : IEntityTypeConfiguration<User>
+    internal class PassengerConfiguration : IEntityTypeConfiguration<Passenger>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<Passenger> builder)
         {
-            builder.ToTable("users");
+            builder.ToTable("passengers");
 
             builder.HasKey(item => item.Id);
 
@@ -28,8 +28,8 @@ namespace TravelCardProgram.Models.Configurations
                 .IsRequired();
 
             builder.HasMany(item => item.TravelCards)
-                .WithOne(item => item.User)
-                .HasForeignKey(item => item.UserId);
+                .WithOne(item => item.Passenger)
+                .HasForeignKey(item => item.PassengerId);
         }
     }
 }

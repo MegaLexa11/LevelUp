@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace TravelCardProgram.Models.Configurations
 {
-    internal class RateConfiguration : IEntityTypeConfiguration<Rate>
+    internal class TariffConfiguration : IEntityTypeConfiguration<Tariff>
     {
-        public void Configure(EntityTypeBuilder<Rate> builder)
+        public void Configure(EntityTypeBuilder<Tariff> builder)
         {
-            builder.ToTable("rates");
+            builder.ToTable("tariffs");
 
             builder.HasKey(item => item.Id);
 
@@ -27,20 +27,23 @@ namespace TravelCardProgram.Models.Configurations
                 .HasMaxLength(250)
                 .IsRequired();
 
+            builder.Property(item => item.UndergroundTripPrice)
+                .HasColumnName("underground_trip_price")
+                .HasColumnType("decimal");
+
+            builder.Property(item => item.GroundTripPrice)
+                .HasColumnName("ground_trip_price")
+                .HasColumnType("decimal");
+
             builder.Property(item => item.Duration)
                 .HasColumnName("duration")
                 .HasColumnType("int");
 
-            // Тут, походу, что-то не так
-            builder.HasOne(item => item.Trip)
-                .WithMany(item => item.Rates)
-                .HasForeignKey(item => item.UndergroundTripId)
+            builder.HasMany(item => item.TravelCards)
+                .WithOne(item => item.Tariff)
+                .HasForeignKey(item => item.TariffId)
                 .IsRequired();
 
-            builder.HasOne(item => item.Trip)
-                .WithMany(item => item.Rates)
-                .HasForeignKey(item => item.GroundTripId)
-                .IsRequired();
         }
         
     }

@@ -7,9 +7,9 @@ namespace TravelCardProgram.Models
     {
         public DbSet<TravelCard> TravelCards { get; set; } = default!;
         public DbSet<Account> Accounts { get; set; } = default!;
-        public DbSet<Rate> Rates { get; set; } = default!;
+        public DbSet<Tariff> Rates { get; set; } = default!;
         public DbSet<TripInfo> Trips { get; set; } = default!;
-        public DbSet<User> Users { get; set; } = default!;
+        public DbSet<Passenger> Users { get; set; } = default!;
 
         public TravelCardsDbContext(DbContextOptions<TravelCardsDbContext> options)
             : base(options)
@@ -22,9 +22,9 @@ namespace TravelCardProgram.Models
 
             modelBuilder.ApplyConfiguration(new TravelCardConfiguration());
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
-            modelBuilder.ApplyConfiguration(new RateConfiguration());
+            modelBuilder.ApplyConfiguration(new TariffConfiguration());
             modelBuilder.ApplyConfiguration(new TripInfoConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new PassengerConfiguration());
         }
     }
 }
