@@ -6,7 +6,7 @@
         public string Number { get; init; }
         public DateTime ActivationDate { get; init; }
         public DateTime? ExpirationDate { get; init; }
-        public bool IsActive  => ExpirationDate is null || ExpirationDate < DateTime.Now;
+        public TravelCardStatuses Status { get; init; }
         public Guid AccountId { get; init; }
         public Guid TariffId { get; init; }
         public Guid PassengerId { get; init; }

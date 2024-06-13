@@ -36,7 +36,10 @@ namespace TravelCardProgram.Models.Configurations
                 .HasColumnName("expiration_date")
                 .HasColumnType("timestamp");
 
-            builder.Ignore(item => item.IsActive);
+            builder.Property(item => item.Status)
+                .HasColumnName("status")
+                .HasColumnType("int")
+                .IsRequired(); ;
 
             builder.HasOne(item => item.Passenger)
                 .WithMany(item => item.TravelCards)
