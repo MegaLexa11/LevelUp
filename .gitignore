@@ -123,6 +123,9 @@ App_Data/*.ldf
 Thumbs.db
 ehthumbs.db
 
+# Migrations
+Migrations/
+
 # Folder config file
 Desktop.ini
 
